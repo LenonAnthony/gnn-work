@@ -21,8 +21,8 @@ SOURCES = {
     "splits": "data/processed/offline/dataset_offline_silver_v1/split_assignments.json",
 }
 ENCODERS = {
-    "labse": "sentence-transformers/LaBSE",
-    "serafim": "PORTULAN/serafim-335m-portuguese-pt-sentence-encoder",
+    "labse": ("sentence-transformers/LaBSE", "836121a0533e5664b21c7aacc5d22951f2b8b25b"),
+    "serafim": ("PORTULAN/serafim-335m-portuguese-pt-sentence-encoder", "a01887015444f7599669c509447c5bdbce958916"),
 }
 KINDS = ("anchor", "category", "tag")
 MAX_SYNSET_SIZE = 50
@@ -100,7 +100,7 @@ def build() -> dict:
     }
     manifest = {
         "version": "gnn_work_kcrg_synset_v1",
-        "sources": {name: {"path": str(path), "sha256": sha256(path)} for name, path in paths.items()},
+        "sources": {name: {"path": str(path.relative_to(PICTOINSTRUCT)), "sha256": sha256(path)} for name, path in paths.items()},
         "nodes": len(nodes),
         "nodes_by_kind": collections.Counter(graph["kinds"]),
         "kcrg_edges": len(edges),
@@ -119,8 +119,8 @@ def encode(labels: list[str]) -> dict[str, np.ndarray]:
     from sentence_transformers import SentenceTransformer
 
     out = {}
-    for name, model_id in ENCODERS.items():
-        model = SentenceTransformer(model_id, device="cpu")
+    for name, (model_id, revision) in ENCODERS.items():
+        model = SentenceTransformer(model_id, revision=revision, device="cpu")
         out[name] = np.asarray(
             model.encode(labels, batch_size=256, normalize_embeddings=True, convert_to_numpy=True, show_progress_bar=False),
             dtype=np.float32,

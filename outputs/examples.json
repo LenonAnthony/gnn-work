@@ -1,0 +1,557 @@
+{
+  "abelha": {
+    "split": "development",
+    "synset_partners": [],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "apicultora",
+      "loja de apicultura",
+      "favo",
+      "favo",
+      "apicultor"
+    ],
+    "Cosseno LaBSE": [
+      "ovelha",
+      "avelã",
+      "águia",
+      "galinha",
+      "mosca"
+    ],
+    "Cosseno Serafim": [
+      "formiga",
+      "vespa",
+      "insetos",
+      "colmeia",
+      "canário"
+    ],
+    "MLP (texto, sem grafo)": [
+      "mosca",
+      "águia",
+      "gaivota",
+      "avestruz",
+      "andorinha"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "larva",
+      "insetos",
+      "pulga",
+      "minhoca",
+      "piolho"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "formiga",
+      "mosca",
+      "colibri",
+      "águia",
+      "borboleta"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "formigueiro",
+      "mosca",
+      "formiga",
+      "águia",
+      "gazela"
+    ]
+  },
+  "tossir": {
+    "split": "test",
+    "synset_partners": [
+      "tossir no braço",
+      "tossir na cara",
+      "tossir no lenço"
+    ],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "dor de garganta",
+      "dor no peito",
+      "fazer teste rápido",
+      "menina com viseira",
+      "ambulância"
+    ],
+    "Cosseno LaBSE": [
+      "tosse",
+      "tosar",
+      "desatar",
+      "desfiar",
+      "tampar"
+    ],
+    "Cosseno Serafim": [
+      "tosse",
+      "espirro",
+      "inalar",
+      "cuspir",
+      "espirrar"
+    ],
+    "MLP (texto, sem grafo)": [
+      "tosse",
+      "tossir no lenço",
+      "arrotar",
+      "arrotar",
+      "espirrar"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "tosse",
+      "espernear",
+      "espernear",
+      "rugir",
+      "vomitar"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "tosse",
+      "tossir no lenço",
+      "vomitar",
+      "latir",
+      "arranhar"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "tosse",
+      "inalar",
+      "assoar o nariz",
+      "mugir",
+      "vomitar"
+    ]
+  },
+  "escola": {
+    "split": "optimization",
+    "synset_partners": [
+      "escola de educação especial",
+      "escola de famílias",
+      "escola bilingue",
+      "escola",
+      "escola",
+      "ensino médio",
+      "escola secundária"
+    ],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "escola de educação especial",
+      "locomover-se",
+      "universidade",
+      "voltar da escola",
+      "auto-escola"
+    ],
+    "Cosseno LaBSE": [
+      "escola",
+      "escola",
+      "escola secundária",
+      "auto-escola",
+      "instituição de ensino"
+    ],
+    "Cosseno Serafim": [
+      "escola",
+      "escola",
+      "escola de línguas",
+      "escola secundária",
+      "levar à escola"
+    ],
+    "MLP (texto, sem grafo)": [
+      "escola",
+      "escola",
+      "escola de inglês",
+      "escola bilingue",
+      "escola de idiomas"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "escola",
+      "escola",
+      "escola bilingue",
+      "escola de educação especial",
+      "escola secundária"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "escola",
+      "escola",
+      "escola secundária",
+      "escola bilingue",
+      "escola de inglês"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "escola",
+      "escola",
+      "escola de educação especial",
+      "escola de inglês",
+      "escola bilingue"
+    ]
+  },
+  "cachorro": {
+    "split": "test",
+    "synset_partners": [],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "alimentar",
+      "associação protetora dos animais",
+      "comida para cães",
+      "alimentar o cachorro",
+      "criar"
+    ],
+    "Cosseno LaBSE": [
+      "cachorro",
+      "cão",
+      "gatinho",
+      "gato",
+      "gato"
+    ],
+    "Cosseno Serafim": [
+      "cachorro",
+      "cão",
+      "peludo",
+      "caninos",
+      "animais"
+    ],
+    "MLP (texto, sem grafo)": [
+      "cachorro",
+      "cão",
+      "caninos",
+      "animais",
+      "gatinho"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "cachorro",
+      "cão",
+      "gatinho",
+      "alimentar o cachorro",
+      "tosar"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "cachorro",
+      "cão",
+      "gatinho",
+      "casinha para cães",
+      "comida para cães"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "cachorro",
+      "cão",
+      "gatinho",
+      "animais",
+      "parque de cães"
+    ]
+  },
+  "água": {
+    "split": "test",
+    "synset_partners": [],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "limonada",
+      "Coca-Cola",
+      "laranjada",
+      "café",
+      "leite com chocolate"
+    ],
+    "Cosseno LaBSE": [
+      "água-viva",
+      "água sanitária",
+      "água potável",
+      "gota de água",
+      "vazamento de água"
+    ],
+    "Cosseno Serafim": [
+      "água doce",
+      "aquífero",
+      "água salgada",
+      "natação",
+      "natação"
+    ],
+    "MLP (texto, sem grafo)": [
+      "água com gás",
+      "água potável",
+      "água-viva",
+      "água doce",
+      "Água com gás"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "Água com gás",
+      "água com gás",
+      "água salgada",
+      "água doce",
+      "água potável"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "água com gás",
+      "Água com gás",
+      "água doce",
+      "água salgada",
+      "água benta"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "água oxigenada",
+      "água oxigenada",
+      "água benta",
+      "água com gás",
+      "água potável"
+    ]
+  },
+  "dentista": {
+    "split": "optimization",
+    "synset_partners": [
+      "dentista",
+      "odontologia"
+    ],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "dentista",
+      "odontologia",
+      "enfermeiro",
+      "médica de reabilitação",
+      "médico de família"
+    ],
+    "Cosseno LaBSE": [
+      "dentista",
+      "clínica dentária",
+      "odontologia",
+      "fio dental",
+      "dentadura"
+    ],
+    "Cosseno Serafim": [
+      "dentista",
+      "odontologia",
+      "clínica dentária",
+      "dentadura",
+      "dente"
+    ],
+    "MLP (texto, sem grafo)": [
+      "dentista",
+      "odontologia",
+      "clínica dentária",
+      "médico otorrinolaringologista",
+      "explorador dentário"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "dentista",
+      "odontologia",
+      "oncologista",
+      "clínica dentária",
+      "cirurgião plástico"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "dentista",
+      "odontologia",
+      "clínica dentária",
+      "dentadura",
+      "higiene dental"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "dentista",
+      "clínica dentária",
+      "explorador dentário",
+      "odontologia",
+      "espelho dentário"
+    ]
+  },
+  "chorar": {
+    "split": "optimization",
+    "synset_partners": [
+      "motricidade"
+    ],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "perguntar",
+      "responder",
+      "falar",
+      "falar",
+      "pensar"
+    ],
+    "Cosseno LaBSE": [
+      "gritar",
+      "gritar",
+      "grito",
+      "cantar",
+      "cantar"
+    ],
+    "Cosseno Serafim": [
+      "choro",
+      "lágrima",
+      "entristecer",
+      "soluçar",
+      "triste"
+    ],
+    "MLP (texto, sem grafo)": [
+      "choro",
+      "tossir no lenço",
+      "murchar",
+      "tossir",
+      "murcho"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "gargalhar",
+      "rir",
+      "rir",
+      "bocejar",
+      "bochecha"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "choro",
+      "lágrima",
+      "sussurrar",
+      "gritar",
+      "gritar"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "choro",
+      "lágrima",
+      "murchar",
+      "sussurrar",
+      "zurrar"
+    ]
+  },
+  "futebol": {
+    "split": "optimization",
+    "synset_partners": [
+      "futebol"
+    ],
+    "Aleatório": [
+      "cigarra",
+      "observatório de aves",
+      "porquinho",
+      "faixa de pedestres",
+      "protetor anti-ruído"
+    ],
+    "Popularidade (grau no KCRG)": [
+      "feder",
+      "fazer xixi",
+      "cortar",
+      "tesoura",
+      "pendurar"
+    ],
+    "Adamic-Adar (KCRG, 2 saltos)": [
+      "futebol",
+      "apanhar a bola",
+      "cartão vermelho",
+      "treinador",
+      "chuteiras"
+    ],
+    "Cosseno LaBSE": [
+      "futebol",
+      "jogar futebol",
+      "campo de futebol",
+      "campo de futebol",
+      "jogador de futebol"
+    ],
+    "Cosseno Serafim": [
+      "futebol",
+      "jogar futebol",
+      "campo de futebol",
+      "campo de futebol",
+      "jogador de futebol"
+    ],
+    "MLP (texto, sem grafo)": [
+      "futebol",
+      "jogar futebol",
+      "padel",
+      "padel",
+      "hóquei"
+    ],
+    "GraphSAGE (texto + KCRG)": [
+      "futebol",
+      "hóquei",
+      "hóquei",
+      "jogar basquetebol",
+      "jogar xadrez"
+    ],
+    "GraphSAGE residual (texto + KCRG)": [
+      "futebol",
+      "hóquei",
+      "hóquei",
+      "padel",
+      "padel"
+    ],
+    "GraphSAGE residual sem arestas (controle)": [
+      "futebol",
+      "jogar futebol",
+      "padel",
+      "padel",
+      "hóquei"
+    ]
+  }
+}

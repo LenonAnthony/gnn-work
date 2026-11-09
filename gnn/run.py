@@ -35,7 +35,9 @@ TRAINED = {
     "mlp": "MLP (texto, sem grafo)",
     "graphsage": "GraphSAGE (texto + KCRG)",
     "graphsage_residual": "GraphSAGE residual (texto + KCRG)",
+    "graphsage_residual_no_edges": "GraphSAGE residual sem arestas (controle)",
 }
+LARGE_SYNSET = 20
 EXAMPLES = ("abelha", "tossir", "escola", "cachorro", "água", "dentista", "chorar", "futebol")
 
 
@@ -83,10 +85,17 @@ class Setup:
         self.text = features
         self.x = torch.cat([features["labse"], features["serafim"], one_hot], dim=1)
         self.edge_index = to_undirected(torch.tensor(graph["edges"]).T)
+        self.no_edges = torch.empty(2, 0, dtype=torch.long)
+        members = {}
+        for pair in graph["positives"]:
+            for synset in pair["synsets"]:
+                members.setdefault(synset, set()).update((pair["left"], pair["right"]))
         self.partners = {}
         for pair in graph["positives"]:
+            disjoint = pair["lexically_disjoint"]
+            small = min(len(members[s]) for s in pair["synsets"]) < LARGE_SYNSET
             for a, b in ((pair["left"], pair["right"]), (pair["right"], pair["left"])):
-                self.partners.setdefault(a, []).append((b, pair["lexically_disjoint"]))
+                self.partners.setdefault(a, []).append((b, {"disjoint": disjoint, "disjoint_small_synset": disjoint and small}))
         splits = graph["splits"]
         self.queries = {
             split: sorted(n for n in self.partners if splits[n] == split) for split in ("development", "test")
@@ -99,15 +108,19 @@ class Setup:
     def evaluate(self, scores_for, split):
         """scores_for(query_nodes) -> tensor [queries, anchors]; o próprio nó recebe -inf."""
         queries = self.queries[split]
-        positions, disjoint = [], []
+        positions, masks = [], {"disjoint": [], "disjoint_small_synset": []}
         for start in range(0, len(queries), 512):
             batch = queries[start : start + 512]
             scores = scores_for(torch.tensor(batch)).float()
             scores[torch.arange(len(batch)), torch.tensor([self.position[q] for q in batch])] = -torch.inf
             items = [[self.position[p] for p, _ in self.partners[q]] for q in batch]
             positions.extend(ranks(scores, items, self.tie_break))
-            disjoint.extend(np.asarray([d for _, d in self.partners[q]]) for q in batch)
-        return summarize(positions, disjoint)
+            for name, values in masks.items():
+                values.extend(np.asarray([flags[name] for _, flags in self.partners[q]]) for q in batch)
+        return summarize(positions, masks)
+
+    def edges(self, kind):
+        return self.no_edges if kind.endswith("no_edges") else self.edge_index
 
 
 def baselines(setup: Setup) -> dict:
@@ -141,7 +154,7 @@ def baselines(setup: Setup) -> dict:
 def train(setup: Setup, kind: str, seed: int, log: list) -> nn.Module:
     torch.manual_seed(seed)
     dim = setup.x.shape[1]
-    model = MLP(dim) if kind == "mlp" else GraphSAGE(dim, residual=kind == "graphsage_residual")
+    model = MLP(dim) if kind == "mlp" else GraphSAGE(dim, residual=kind.startswith("graphsage_residual"))
     optimizer = torch.optim.AdamW(model.parameters(), lr=CONFIG["learning_rate"], weight_decay=CONFIG["weight_decay"])
     generator = torch.Generator().manual_seed(seed)
     best, best_state, waited = -1.0, None, 0
@@ -156,7 +169,7 @@ def train(setup: Setup, kind: str, seed: int, log: list) -> nn.Module:
             left = torch.where(flip, batch[:, 1], batch[:, 0])
             right = torch.where(flip, batch[:, 0], batch[:, 1])
             extra = setup.anchors[torch.randint(len(setup.anchors), (CONFIG["extra_negatives"],), generator=generator)]
-            z = model(setup.x, setup.edge_index)
+            z = model(setup.x, setup.edges(kind))
             logits = z[left] @ torch.cat([z[right], z[extra]]).T / CONFIG["temperature"]
             loss = F.cross_entropy(logits, torch.arange(len(batch)))
             optimizer.zero_grad()
@@ -165,7 +178,7 @@ def train(setup: Setup, kind: str, seed: int, log: list) -> nn.Module:
             losses.append(loss.item())
         model.eval()
         with torch.no_grad():
-            z = model(setup.x, setup.edge_index)
+            z = model(setup.x, setup.edges(kind))
         dev, _ = setup.evaluate(lambda q: z[q] @ z[setup.anchors].T, "development")
         log.append({"model": kind, "seed": seed, "epoch": epoch, "loss": float(np.mean(losses)), "dev_mrr": dev["mrr"]})
         if dev["mrr"] > best:
@@ -222,7 +235,7 @@ def main() -> None:
             started = time.perf_counter()
             model = train(setup, kind, seed, log)
             with torch.no_grad():
-                z = model(setup.x, setup.edge_index)
+                z = model(setup.x, setup.edges(kind))
             scorer = lambda q, z=z: z[q] @ z[setup.anchors].T
             dev, _ = setup.evaluate(scorer, "development")
             test, arrays = setup.evaluate(scorer, "test")
@@ -242,11 +255,16 @@ def main() -> None:
         results[label]["runs"] = runs
 
     gnn = max((TRAINED["graphsage"], TRAINED["graphsage_residual"]), key=lambda name: results[name]["development"]["mrr"])
-    comparisons = {
-        f"{gnn} - {other}": {m: paired_bootstrap(per_query[gnn][m], per_query[other][m], CONFIG["bootstrap_iterations"]) for m in ("mrr", "recall@10", "ndcg@10")}
-        for other in per_query
-        if other != gnn
-    }
+    def compare(left, right):
+        out = {m: paired_bootstrap(per_query[left][m], per_query[right][m], CONFIG["bootstrap_iterations"]) for m in ("mrr", "recall@10", "ndcg@10")}
+        for subset in ("disjoint", "disjoint_small_synset"):
+            m = f"{subset}_pair_hits@10"
+            out[m] = paired_bootstrap(per_query[left][m], per_query[right][m], CONFIG["bootstrap_iterations"], weights=per_query[left][f"{subset}_pairs"])
+        return out
+
+    comparisons = {f"{gnn} - {other}": compare(gnn, other) for other in per_query if other != gnn}
+    control = TRAINED["graphsage_residual_no_edges"]
+    comparisons[f"{control} - {TRAINED['mlp']}"] = compare(control, TRAINED["mlp"])
     report = {
         "config": CONFIG,
         "train_pairs": len(setup.train_pairs),
@@ -255,6 +273,7 @@ def main() -> None:
         "selected_gnn_by_development_mrr": gnn,
         "results": results,
         "bootstrap_test_seed3407": comparisons,
+        "large_synset": LARGE_SYNSET,
         "note": "Relação-alvo silver (synset WordNet compartilhado na ARASAAC); não é julgamento profissional de CAA.",
     }
     (args.output / "results.json").write_text(json.dumps(report, indent=2, ensure_ascii=False))

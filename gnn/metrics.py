@@ -32,30 +32,39 @@ def filtered_pair_ranks(position: np.ndarray) -> np.ndarray:
     return filtered
 
 
-def summarize(positions: list[np.ndarray], disjoint: list[np.ndarray]) -> tuple[dict, dict[str, np.ndarray]]:
+def summarize(positions: list[np.ndarray], subsets: dict[str, list[np.ndarray]]) -> tuple[dict, dict[str, np.ndarray]]:
+    """subsets mapeia um nome para a máscara por par de cada consulta (por exemplo, pares sem palavra em comum)."""
     per_query = [query_metrics(p) for p in positions]
     names = per_query[0]
     per_query_arrays = {name: np.asarray([q[name] for q in per_query]) for name in names}
-    pairs = np.concatenate([filtered_pair_ranks(p) for p in positions])
-    mask = np.concatenate(disjoint)
     summary = {name: float(values.mean()) for name, values in per_query_arrays.items()}
-    summary.update(
-        {
-            "pair_hits@10": float(np.mean(pairs <= 10)),
-            "pair_mrr": float(np.mean(1 / pairs)),
-            "disjoint_pair_hits@10": float(np.mean(pairs[mask] <= 10)),
-            "disjoint_pair_mrr": float(np.mean(1 / pairs[mask])),
-            "queries": len(positions),
-            "pairs": int(len(pairs)),
-            "disjoint_pairs": int(mask.sum()),
-        }
-    )
+    filtered = [filtered_pair_ranks(p) for p in positions]
+    pairs = np.concatenate(filtered)
+    summary.update({"pair_hits@10": float(np.mean(pairs <= 10)), "pair_mrr": float(np.mean(1 / pairs)), "queries": len(positions), "pairs": int(len(pairs))})
+    for name, masks in subsets.items():
+        mask = np.concatenate(masks)
+        summary.update(
+            {
+                f"{name}_pair_hits@10": float(np.mean(pairs[mask] <= 10)),
+                f"{name}_pair_mrr": float(np.mean(1 / pairs[mask])),
+                f"{name}_pairs": int(mask.sum()),
+            }
+        )
+        per_query_arrays[f"{name}_pair_hits@10"] = np.asarray([np.mean(f[m] <= 10) if m.any() else 0.0 for f, m in zip(filtered, masks)])
+        per_query_arrays[f"{name}_pairs"] = np.asarray([m.sum() for m in masks], float)
     return summary, per_query_arrays
 
 
-def paired_bootstrap(left: np.ndarray, right: np.ndarray, iterations: int = 10_000, seed: int = 3407) -> dict[str, float]:
+def paired_bootstrap(left: np.ndarray, right: np.ndarray, iterations: int = 10_000, seed: int = 3407, weights: np.ndarray | None = None) -> dict[str, float]:
+    """Reamostra consultas; com weights, a diferença é a média ponderada (pares de cada consulta)."""
     differences = np.asarray(left, float) - np.asarray(right, float)
+    weights = np.ones_like(differences) if weights is None else np.asarray(weights, float)
+    keep = weights > 0
+    differences, weights = differences[keep], weights[keep]
     rng = np.random.default_rng(seed)
-    replicates = np.asarray([differences[rng.integers(0, len(differences), len(differences))].mean() for _ in range(iterations)])
+    replicates = []
+    for _ in range(iterations):
+        sample = rng.integers(0, len(differences), len(differences))
+        replicates.append(np.sum(differences[sample] * weights[sample]) / np.sum(weights[sample]))
     lower, upper = np.quantile(replicates, [0.025, 0.975])
-    return {"difference": float(differences.mean()), "ci95_lower": float(lower), "ci95_upper": float(upper), "n": len(differences)}
+    return {"difference": float(np.sum(differences * weights) / np.sum(weights)), "ci95_lower": float(lower), "ci95_upper": float(upper), "n": len(differences)}

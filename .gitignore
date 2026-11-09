@@ -3,6 +3,10 @@ __pycache__/
 *.pyc
 .env
 .env.*
-data/
-outputs/
 .cache/
+data/*
+!data/manifest.json
+outputs/*
+!outputs/results.json
+!outputs/examples.json
+!outputs/training_log.json

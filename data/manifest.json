@@ -1,0 +1,50 @@
+{
+  "version": "gnn_work_kcrg_synset_v1",
+  "sources": {
+    "kcrg": {
+      "path": "data/processed/offline/graphs/G_kcrg.json",
+      "sha256": "8a718022a48ae8f5009ce548478a2e95cb1960886d4fcaaafc39b9e98edf2e64"
+    },
+    "seeds": {
+      "path": "data/processed/offline/graphs/seed_units.jsonl",
+      "sha256": "bccd4061cdc71e878b0a37e37e909e78a967d865107e8ac7a90d04a70cdb386e"
+    },
+    "concepts": {
+      "path": "data/interim/offline/grouped/generation_concepts.jsonl",
+      "sha256": "8acd1a85b38fe4b1fa2f5bfde8b1c5431509e774d1e092b38680914648a40b22"
+    },
+    "splits": {
+      "path": "data/processed/offline/dataset_offline_silver_v1/split_assignments.json",
+      "sha256": "723ec3be25a7c741c20b8d4969e4a00455b44b81778822b31ab1dd9efee5b093"
+    }
+  },
+  "nodes": 11865,
+  "nodes_by_kind": {
+    "anchor": 10772,
+    "category": 567,
+    "tag": 526
+  },
+  "kcrg_edges": 53135,
+  "anchors_by_split": {
+    "development": 2204,
+    "optimization": 6295,
+    "test": 2202,
+    "none": 71
+  },
+  "max_synset_size": 50,
+  "excluded_hub_synsets": [
+    "04209460-n",
+    "06820056-n",
+    "07211342-n",
+    "13603216-n"
+  ],
+  "positive_pairs": 15719,
+  "lexically_disjoint_pairs": 9518,
+  "anchors_with_partner": 6295,
+  "target_relation": "dois conceitos compartilham ao menos um synset WordNet anotado na ARASAAC; essa relação não entra no KCRG",
+  "outputs": {
+    "features_labse.npy": "32582bad8717a6fc80db66c83848887e442f058505ddc440645a5f2a88f86b65",
+    "features_serafim.npy": "b0f9a3037cfb4df19273446b4ae1d2e69497f883e3ec71d87ded217d74dec3be",
+    "graph.json": "f64f7e17746b9a272f1fb1433bdbc740a1f93ed8fb17444aa240b7e21562b79d"
+  }
+}
